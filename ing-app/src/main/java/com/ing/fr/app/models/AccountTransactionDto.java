@@ -7,6 +7,11 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/***
+ * @author Gautam Sahoo
+ * @version 1.0
+ * @apiNote AccountTransactionDto is the class exposes information for front end
+ */
 @Data
 @AllArgsConstructor
 public class AccountTransactionDto implements Serializable {

@@ -22,6 +22,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/***
+ * @author Gautam Sahoo
+ * @version 1.0
+ * @apiNote AccountService is the class exposes functionality performing action create account , deposit , withdrawal and get transaction details
+ */
 @Service
 public class AccountService {
 
@@ -38,12 +43,28 @@ public class AccountService {
 
     private final ModelMapper modelMapper = new ModelMapper();
 
+    /**
+     * This method is useful to find Account details from the database which is searched by id
+     *
+     * @param id primary key of table
+     * @return Account details information
+     * @throws ServiceException EntityNotFoundException if account does not exists
+     */
+
     public AccountDto findAccountById(long id) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.findAccountById -> params {0}" , id);
+            logger.debug("Enter into method AccountService.findAccountById -> params {0}", id);
         }
         return accountRepository.findById(id).map(account -> modelMapper.map(account, AccountDto.class)).orElseThrow(() -> new EntityNotFoundException("Account not present in system with ID " + id));
     }
+
+    /**
+     * This method is useful to find Account details from the database which is searched by account number
+     *
+     * @param accountNumber account number for which information needs to be extracted
+     * @return Account details information
+     * @throws ServiceException
+     */
 
     public AccountDto findAccountByAccountNumber(String accountNumber) throws ServiceException {
         if (logger.isDebugEnabled()) {
@@ -59,9 +80,17 @@ public class AccountService {
         return accountDto;
     }
 
+    /**
+     * This method is useful to create a new Account under the customer if account number does not exists . Account is create into the database
+     *
+     * @param accountDto  accepts front end objects to create create account informations
+     * @param customerCif accepts customer cif
+     * @throws ServiceException EntityNotFoundException if account not found and EntityAlreadyPresentException if account number already exists
+     */
+
     public void createAccountUnderCustomer(AccountDto accountDto, String customerCif) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.createAccountUnderCustomer -> params {0} {1}", accountDto , customerCif);
+            logger.debug("Enter into method AccountService.createAccountUnderCustomer -> params {0} {1}", accountDto, customerCif);
         }
         Customer customer = customerRepository.getCustomerByCIF(customerCif).orElseThrow(() -> new EntityNotFoundException("Customer not present in system with customerID " + customerCif));
         Account account = new Account();
@@ -76,9 +105,17 @@ public class AccountService {
         }
         accountRepository.save(account);
         if (logger.isDebugEnabled()) {
-            logger.debug("Exit from method AccountService.createAccountUnderCustomer -> params {0} {1}", accountDto , customerCif);
+            logger.debug("Exit from method AccountService.createAccountUnderCustomer -> params {0} {1}", accountDto, customerCif);
         }
     }
+
+    /**
+     * This method is useful to find Account transactions details from the database which is searched by account number
+     *
+     * @param accountNumber accepts account number to find the transactions
+     * @return returns a list of all transaction in descending order
+     * @throws ServiceException
+     */
 
     public List<AccountTransactionDto> getAccountTransactions(String accountNumber) throws ServiceException {
         if (logger.isDebugEnabled()) {
@@ -92,6 +129,14 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * This method is useful to find Account balance from the database which is searched by account number
+     *
+     * @param accountNumber accepts account number for which balance can be extracted
+     * @return balance of the account number specified
+     * @throws ServiceException throws EntityNotFoundException if account not present in the system
+     */
+
     public Double getAccountBalance(String accountNumber) throws ServiceException {
         if (logger.isDebugEnabled()) {
             logger.debug("Enter into method AccountService.getAccountBalance -> params {0}", accountNumber);
@@ -100,9 +145,17 @@ public class AccountService {
         return account.map(Account::getBalance).orElseThrow(() -> new EntityNotFoundException("Account number not present in system " + accountNumber));
     }
 
+    /**
+     * This method is useful to perform deposit action on the Account from the database. Account is searched by account number and deposit amount
+     *
+     * @param accountNumber accepts account number for which deposit action can be performed
+     * @param depositAmount amount needs to be deposited to the account
+     * @throws ServiceException throws EntityNotFoundException if account not present
+     */
+
     public void accountDeposit(String accountNumber, double depositAmount) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.accountDeposit -> params {0} {1}" , accountNumber , depositAmount);
+            logger.debug("Enter into method AccountService.accountDeposit -> params {0} {1}", accountNumber, depositAmount);
         }
         Account account = accountRepository.getAccountByNumber(accountNumber).orElseThrow(() -> new EntityNotFoundException("Account number not present in system " + accountNumber));
         account.setBalance(account.getBalance() + depositAmount);
@@ -114,13 +167,21 @@ public class AccountService {
         accountTransaction.setTransactionType(AccountTransaction.TransactionType.CREDIT);
         accountTransactionRepository.save(accountTransaction);
         if (logger.isDebugEnabled()) {
-            logger.debug("Exit from method AccountService.accountDeposit -> params {0} {1}" , accountNumber , depositAmount);
+            logger.debug("Exit from method AccountService.accountDeposit -> params {0} {1}", accountNumber, depositAmount);
         }
     }
 
+    /**
+     * This method is useful to perform withdrawal action on the Account from the database. Account is searched by account number and deposit amount
+     *
+     * @param accountNumber  accepts account number for which deposit action can be performed
+     * @param withdrawAmount amount needs to be deposited to the account
+     * @throws ServiceException throws EntityNotFoundException if account not present
+     */
+
     public void accountWithdraw(String accountNumber, double withdrawAmount) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.accountWithdraw ->  params {0} {1}" , accountNumber , withdrawAmount);
+            logger.debug("Enter into method AccountService.accountWithdraw ->  params {0} {1}", accountNumber, withdrawAmount);
         }
 
         Account account = accountRepository.getAccountByNumber(accountNumber).orElseThrow(() -> new EntityNotFoundException("Account number not present in system " + accountNumber));
@@ -133,7 +194,7 @@ public class AccountService {
         accountTransaction.setTransactionType(AccountTransaction.TransactionType.DEBIT);
         accountTransactionRepository.save(accountTransaction);
         if (logger.isDebugEnabled()) {
-            logger.debug("Exit from method AccountService.accountWithdraw ->  params {0} {1}" , accountNumber , withdrawAmount);
+            logger.debug("Exit from method AccountService.accountWithdraw ->  params {0} {1}", accountNumber, withdrawAmount);
         }
     }
 }

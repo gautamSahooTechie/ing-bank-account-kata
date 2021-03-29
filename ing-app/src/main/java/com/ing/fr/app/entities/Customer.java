@@ -10,6 +10,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/***
+ * @author Gautam Sahoo
+ * @version 1.0
+ * @apiNote Customer is the entity class maintains all customer details and its association in Database
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

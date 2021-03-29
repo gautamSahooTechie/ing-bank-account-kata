@@ -15,6 +15,11 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 
+/***
+ * @author Gautam Sahoo
+ * @version 1.0
+ * @apiNote CustomerService is the class exposes functionality performing action create customer  and deposit , withdrawal actions from Customer
+ */
 @Service
 public class CustomerService {
 
@@ -28,6 +33,13 @@ public class CustomerService {
 
     private final ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
     private final ModelMapper modelMapper = new ModelMapper();
+
+    /**
+     * This method is useful in creating new customer in database with customer information
+     *
+     * @param customerDto Customer details information need to be onboarded in the system
+     * @throws ServiceException EntityAlreadyPresentException thrown if customer already present
+     */
 
     public void createCustomer(CustomerDto customerDto) throws ServiceException {
         if (logger.isDebugEnabled()) {
@@ -49,12 +61,28 @@ public class CustomerService {
         }
     }
 
+    /**
+     * Finds the Customer by database primary key ID which uniquely identifies the customer record
+     *
+     * @param id Database primary key
+     * @return Customer details information
+     * @throws ServiceException throws EntityNotFoundException if customer not found in system
+     */
+
     public CustomerDto findCustomerById(long id) throws ServiceException {
         if (logger.isDebugEnabled()) {
             logger.debug("Enter into method CustomerService.findCustomerById -> params {0}", id);
         }
         return customerRepository.findById(id).map(customer -> modelMapper.map(customer, CustomerDto.class)).orElseThrow(() -> new EntityNotFoundException("Customer not present in system with customerID " + id));
     }
+
+    /**
+     * Finds the Customer by Customer Cif number which uniquely identifies the customer record , Customer also has this information
+     *
+     * @param customerCif Customer cif number
+     * @return Customer details information
+     * @throws ServiceException throws EntityNotFoundException if customer not found in system
+     */
 
     public CustomerDto findCustomerByCustomerCif(@NotNull String customerCif) throws ServiceException {
         if (logger.isDebugEnabled()) {
@@ -63,9 +91,18 @@ public class CustomerService {
         return customerRepository.getCustomerByCIF(customerCif).map(customer -> modelMapper.map(customer, CustomerDto.class)).orElseThrow(() -> new EntityNotFoundException("Customer not present in system with customerCif " + customerCif));
     }
 
+    /**
+     * This method is useful to perform deposit action on the Account from the database. Account is searched by account number and deposit amount.
+     * Please note only amount above 0.01 EURO can be deposited as per bank rules
+     *
+     * @param accountNumber accepts account number for which deposit action can be performed
+     * @param depositAmount amount needs to be deposited to the account
+     * @throws ServiceException throws EntityNotFoundException if account not present
+     */
+
     public void depositMoney(@NotNull String accountNumber, double depositAmount) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method CustomerService.depositMoney -> params {0} , {1} " ,accountNumber , depositAmount);
+            logger.debug("Enter into method CustomerService.depositMoney -> params {0} , {1} ", accountNumber, depositAmount);
         }
         double minimumDepositAmount = context.getBean("minimumDepositAmount", Double.class);
         // Applying bank conditions
@@ -76,13 +113,22 @@ public class CustomerService {
         }
         accountService.accountDeposit(accountNumber, depositAmount);
         if (logger.isDebugEnabled()) {
-            logger.debug("Exit from method CustomerService.depositMoney -> params {0} , {1} " ,accountNumber , depositAmount);
+            logger.debug("Exit from method CustomerService.depositMoney -> params {0} , {1} ", accountNumber, depositAmount);
         }
     }
 
+    /**
+     * This method is useful to perform withdrawal action on the Account from the database. Account is searched by account number and deposit amount
+     * Please note as per bank rules overdraft is not allowed in withdrawal action
+     *
+     * @param accountNumber  accepts account number for which deposit action can be performed
+     * @param withdrawAmount amount needs to be deposited to the account
+     * @throws ServiceException throws EntityNotFoundException if account not present
+     */
+
     public void withdrawMoney(@NotNull String accountNumber, double withdrawAmount) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method CustomerService.withdrawMoney -> params {0} , {1} " ,accountNumber , withdrawAmount);
+            logger.debug("Enter into method CustomerService.withdrawMoney -> params {0} , {1} ", accountNumber, withdrawAmount);
         }
         long startTime = System.currentTimeMillis();
         boolean overDraftAllowed = context.getBean("overDraftAllowed", Boolean.class);
@@ -95,7 +141,7 @@ public class CustomerService {
         }
         accountService.accountWithdraw(accountNumber, withdrawAmount);
         if (logger.isDebugEnabled()) {
-            logger.debug("Exit from method CustomerService.withdrawMoney -> params {0} , {1} " ,accountNumber , withdrawAmount);
+            logger.debug("Exit from method CustomerService.withdrawMoney -> params {0} , {1} ", accountNumber, withdrawAmount);
         }
     }
 }

@@ -9,6 +9,11 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/***
+ * @author Gautam Sahoo
+ * @version 1.0
+ * @apiNote AccountTransaction is the entity class maintains all account transaction details in Database
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

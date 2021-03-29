@@ -9,6 +9,13 @@ import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
+
+/***
+ * @author Gautam Sahoo
+ * @version 1.0
+ * @apiNote CustomerDto is the class exposes information for front end
+ */
+
 @Data
 public class CustomerDto implements Serializable {
 

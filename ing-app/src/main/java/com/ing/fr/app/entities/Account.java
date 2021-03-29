@@ -9,6 +9,11 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
+/***
+ * @author Gautam Sahoo
+ * @version 1.0
+ * @apiNote Account is the entity class maintains all account details in Database
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

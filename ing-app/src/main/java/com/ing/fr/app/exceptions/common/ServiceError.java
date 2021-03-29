@@ -6,6 +6,11 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
+/***
+ * @author Gautam Sahoo
+ * @version 1.0
+ * @apiNote ServiceError is the class returned to UI if in case there is conditional error
+ */
 @Data
 public class ServiceError {
 
