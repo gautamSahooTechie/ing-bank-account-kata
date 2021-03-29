@@ -20,6 +20,7 @@ public class AccountDto implements Serializable {
     private String accountNumber;
 
     public AccountDto() {
+        // Do nothing because used for creating objects for bean.
     }
 
     public double getBalance() {

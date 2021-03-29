@@ -40,14 +40,14 @@ public class AccountService {
 
     public AccountDto findAccountById(long id) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.findAccountById -> params" + id);
+            logger.debug("Enter into method AccountService.findAccountById -> params {0}" , id);
         }
         return accountRepository.findById(id).map(account -> modelMapper.map(account, AccountDto.class)).orElseThrow(() -> new EntityNotFoundException("Account not present in system with ID " + id));
     }
 
     public AccountDto findAccountByAccountNumber(String accountNumber) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.accountNumber -> params" + accountNumber);
+            logger.debug("Enter into method AccountService.accountNumber -> params {0}", accountNumber);
         }
         return accountRepository.getAccountByNumber(accountNumber).map(account -> mapAccount(account)).orElseThrow(() -> new EntityNotFoundException("Account number not present in system " + accountNumber));
     }
@@ -61,7 +61,7 @@ public class AccountService {
 
     public void createAccountUnderCustomer(AccountDto accountDto, String customerCif) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.createAccountUnderCustomer -> params" + accountDto + " " + customerCif);
+            logger.debug("Enter into method AccountService.createAccountUnderCustomer -> params {0} {1}", accountDto , customerCif);
         }
         Customer customer = customerRepository.getCustomerByCIF(customerCif).orElseThrow(() -> new EntityNotFoundException("Customer not present in system with customerID " + customerCif));
         Account account = new Account();
@@ -76,13 +76,13 @@ public class AccountService {
         }
         accountRepository.save(account);
         if (logger.isDebugEnabled()) {
-            logger.debug("Exit from method AccountService.createAccountUnderCustomer -> params" + accountDto + " " + customerCif);
+            logger.debug("Exit from method AccountService.createAccountUnderCustomer -> params {0} {1}", accountDto , customerCif);
         }
     }
 
     public List<AccountTransactionDto> getAccountTransactions(String accountNumber) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.getAccountTransactions -> params" + accountNumber);
+            logger.debug("Enter into method AccountService.getAccountTransactions -> params {0}", accountNumber);
         }
         Account account = accountRepository.getAccountByNumber(accountNumber).orElseThrow(() -> new EntityNotFoundException("Account number not present in system " + accountNumber));
 
@@ -94,7 +94,7 @@ public class AccountService {
 
     public Double getAccountBalance(String accountNumber) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.getAccountBalance -> params" + accountNumber);
+            logger.debug("Enter into method AccountService.getAccountBalance -> params {0}", accountNumber);
         }
         Optional<Account> account = accountRepository.getAccountByNumber(accountNumber);
         return account.map(Account::getBalance).orElseThrow(() -> new EntityNotFoundException("Account number not present in system " + accountNumber));
@@ -102,7 +102,7 @@ public class AccountService {
 
     public void accountDeposit(String accountNumber, double depositAmount) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.accountDeposit -> params" + accountNumber + " " + depositAmount);
+            logger.debug("Enter into method AccountService.accountDeposit -> params {0} {1}" , accountNumber , depositAmount);
         }
         Account account = accountRepository.getAccountByNumber(accountNumber).orElseThrow(() -> new EntityNotFoundException("Account number not present in system " + accountNumber));
         account.setBalance(account.getBalance() + depositAmount);
@@ -114,13 +114,13 @@ public class AccountService {
         accountTransaction.setTransactionType(AccountTransaction.TransactionType.CREDIT);
         accountTransactionRepository.save(accountTransaction);
         if (logger.isDebugEnabled()) {
-            logger.debug("Exit from method AccountService.accountDeposit -> params" + accountNumber + " " + depositAmount);
+            logger.debug("Exit from method AccountService.accountDeposit -> params {0} {1}" , accountNumber , depositAmount);
         }
     }
 
     public void accountWithdraw(String accountNumber, double withdrawAmount) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method AccountService.accountWithdraw -> params" + accountNumber + " " + withdrawAmount);
+            logger.debug("Enter into method AccountService.accountWithdraw ->  params {0} {1}" , accountNumber , withdrawAmount);
         }
 
         Account account = accountRepository.getAccountByNumber(accountNumber).orElseThrow(() -> new EntityNotFoundException("Account number not present in system " + accountNumber));
@@ -133,7 +133,7 @@ public class AccountService {
         accountTransaction.setTransactionType(AccountTransaction.TransactionType.DEBIT);
         accountTransactionRepository.save(accountTransaction);
         if (logger.isDebugEnabled()) {
-            logger.debug("Exit from method AccountService.accountWithdraw -> params" + accountNumber + " " + withdrawAmount);
+            logger.debug("Exit from method AccountService.accountWithdraw ->  params {0} {1}" , accountNumber , withdrawAmount);
         }
     }
 }

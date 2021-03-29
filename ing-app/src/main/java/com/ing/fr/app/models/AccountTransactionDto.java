@@ -17,6 +17,7 @@ public class AccountTransactionDto implements Serializable {
     private TransactionType transactionType;
 
     public AccountTransactionDto() {
+        // Do nothing because used for creating objects for bean.
     }
 
     public double getTransactionAmount() {

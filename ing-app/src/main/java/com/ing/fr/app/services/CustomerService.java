@@ -31,7 +31,7 @@ public class CustomerService {
 
     public void createCustomer(CustomerDto customerDto) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method CustomerService.createCustomer -> params" + customerDto);
+            logger.debug("Enter into method CustomerService.createCustomer -> params {0}", customerDto);
         }
         Customer customer = new Customer();
         customer.setCustomerCif(customerDto.getCustomerCif());
@@ -45,27 +45,27 @@ public class CustomerService {
 
         customerRepository.save(customer);
         if (logger.isDebugEnabled()) {
-            logger.debug("Exit from method CustomerService.createCustomer -> params" + customerDto);
+            logger.debug("Exit from method CustomerService.createCustomer -> params {0}", customerDto);
         }
     }
 
     public CustomerDto findCustomerById(long id) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method CustomerService.findCustomerById -> params" + id);
+            logger.debug("Enter into method CustomerService.findCustomerById -> params {0}", id);
         }
         return customerRepository.findById(id).map(customer -> modelMapper.map(customer, CustomerDto.class)).orElseThrow(() -> new EntityNotFoundException("Customer not present in system with customerID " + id));
     }
 
     public CustomerDto findCustomerByCustomerCif(@NotNull String customerCif) throws ServiceException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter into method CustomerService.findCustomerByCustomerCif -> params" + customerCif);
+            logger.debug("Enter into method CustomerService.findCustomerByCustomerCif -> params {0}", customerCif);
         }
         return customerRepository.getCustomerByCIF(customerCif).map(customer -> modelMapper.map(customer, CustomerDto.class)).orElseThrow(() -> new EntityNotFoundException("Customer not present in system with customerCif " + customerCif));
     }
 
     public void depositMoney(@NotNull String accountNumber, double depositAmount) throws ServiceException {
         if (logger.isDebugEnabled()) {
-
+            logger.debug("Enter into method CustomerService.depositMoney -> params {0} , {1} " ,accountNumber , depositAmount);
         }
         double minimumDepositAmount = context.getBean("minimumDepositAmount", Double.class);
         // Applying bank conditions
@@ -76,13 +76,13 @@ public class CustomerService {
         }
         accountService.accountDeposit(accountNumber, depositAmount);
         if (logger.isDebugEnabled()) {
-
+            logger.debug("Exit from method CustomerService.depositMoney -> params {0} , {1} " ,accountNumber , depositAmount);
         }
     }
 
     public void withdrawMoney(@NotNull String accountNumber, double withdrawAmount) throws ServiceException {
         if (logger.isDebugEnabled()) {
-
+            logger.debug("Enter into method CustomerService.withdrawMoney -> params {0} , {1} " ,accountNumber , withdrawAmount);
         }
         long startTime = System.currentTimeMillis();
         boolean overDraftAllowed = context.getBean("overDraftAllowed", Boolean.class);
@@ -95,8 +95,7 @@ public class CustomerService {
         }
         accountService.accountWithdraw(accountNumber, withdrawAmount);
         if (logger.isDebugEnabled()) {
-
+            logger.debug("Exit from method CustomerService.withdrawMoney -> params {0} , {1} " ,accountNumber , withdrawAmount);
         }
-        logger.debug("CustomerService for withdrawMoney took time in millis " + (System.currentTimeMillis() - startTime));
     }
 }

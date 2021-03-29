@@ -26,6 +26,7 @@ public class CustomerDto implements Serializable {
     private Date dateOfBirth;
 
     public CustomerDto() {
+        // Do nothing because used for creating objects for bean.
     }
 
     public String getCustomerCif() {
