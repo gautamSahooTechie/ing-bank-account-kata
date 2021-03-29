@@ -1,0 +1,4 @@
+/ing-app/target/
+/ing-app/src/main/front-end/ing-app/node_modules/
+/ing-app/src/main/front-end/.vscode/
+/.idea/
