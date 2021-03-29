@@ -13,22 +13,20 @@ import java.util.Date;
 public class CustomerDto implements Serializable {
 
     private static final long serialVersionUID = 919836451836282574L;
-
-    public CustomerDto() {}
-
     @Pattern(regexp = "^[A-Za-z0-9]*$", message = "Customer cif can be alphanumeric only")
     @NotNull
     @Length(max = 14, message = "Customer cif max length 14")
     private String customerCif;
-
     @Pattern(regexp = "^[A-Za-z0-9]*$", message = "Customer name can be alphanumeric only")
     @NotNull
     @Length(max = 25, message = "Customer name max length 25")
     private String customerName;
-
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
+
+    public CustomerDto() {
+    }
 
     public String getCustomerCif() {
         return customerCif;

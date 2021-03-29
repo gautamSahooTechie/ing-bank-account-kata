@@ -1,48 +1,46 @@
 package com.ing.fr.app.models;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 import com.ing.fr.app.entities.AccountTransaction.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 public class AccountTransactionDto implements Serializable {
 
-	private static final long serialVersionUID = -1832973080479696704L;
+    private static final long serialVersionUID = -1832973080479696704L;
+    private double transactionAmount;
+    private LocalDateTime dateTime;
+    private TransactionType transactionType;
 
-	public AccountTransactionDto() {}
+    public AccountTransactionDto() {
+    }
 
-	private double transactionAmount;
+    public double getTransactionAmount() {
+        return transactionAmount;
+    }
 
-	private LocalDateTime dateTime;
+    public void setTransactionAmount(double transactionAmount) {
+        this.transactionAmount = transactionAmount;
+    }
 
-	private TransactionType transactionType;
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
 
-	public double getTransactionAmount() {
-		return transactionAmount;
-	}
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
-	public void setTransactionAmount(double transactionAmount) {
-		this.transactionAmount = transactionAmount;
-	}
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
 
-	public LocalDateTime getDateTime() {
-		return dateTime;
-	}
-
-	public void setDateTime(LocalDateTime dateTime) {
-		this.dateTime = dateTime;
-	}
-
-	public TransactionType getTransactionType() {
-		return transactionType;
-	}
-
-	public void setTransactionType(TransactionType transactionType) {
-		this.transactionType = transactionType;
-	}
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
 
 }

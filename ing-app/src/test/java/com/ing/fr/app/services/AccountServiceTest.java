@@ -33,7 +33,7 @@ class AccountServiceTest {
     @Test
     void testFindAccountByIdWithException() {
         long accountId = 5;
-        EntityNotFoundException entityNotFoundException =  assertThrows(EntityNotFoundException.class, () -> accountService.findAccountById(5));
+        EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> accountService.findAccountById(5));
         String expectedMessage = "Account not present in system with ID " + accountId;
         String actualMessage = entityNotFoundException.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
@@ -42,7 +42,7 @@ class AccountServiceTest {
     @Test
     void testFindAccountByAccountNumberWithException() {
         String accountNumber = "XyZ";
-        EntityNotFoundException entityNotFoundException =  assertThrows(EntityNotFoundException.class, () -> accountService.findAccountByAccountNumber(accountNumber));
+        EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> accountService.findAccountByAccountNumber(accountNumber));
         String expectedMessage = "Account number not present in system " + accountNumber;
         String actualMessage = entityNotFoundException.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
@@ -55,7 +55,7 @@ class AccountServiceTest {
         accountDto.setAccountNumber("2121");
         accountDto.setBalance(8888.3);
 
-        EntityNotFoundException entityNotFoundException =  assertThrows(EntityNotFoundException.class, () -> accountService.createAccountUnderCustomer(accountDto, customerCif));
+        EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> accountService.createAccountUnderCustomer(accountDto, customerCif));
         String expectedMessage = "Customer not present in system with customerID " + customerCif;
         String actualMessage = entityNotFoundException.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
@@ -76,7 +76,7 @@ class AccountServiceTest {
         AccountDto accountDto = new AccountDto();
         accountDto.setAccountNumber("2121");
         accountDto.setBalance(100);
-        assertDoesNotThrow( () -> accountService.createAccountUnderCustomer(accountDto, requestDto.getCustomerCif()));
+        assertDoesNotThrow(() -> accountService.createAccountUnderCustomer(accountDto, requestDto.getCustomerCif()));
 
         // verify account present in database
         AccountDto dbAccount = assertDoesNotThrow(() -> accountService.findAccountByAccountNumber(accountDto.getAccountNumber()));
@@ -90,7 +90,7 @@ class AccountServiceTest {
     @Test
     void getAccountBalanceWithException() {
         String accountNumber = "55";
-        EntityNotFoundException entityNotFoundException =  assertThrows(EntityNotFoundException.class, () -> accountService.getAccountBalance(accountNumber));
+        EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> accountService.getAccountBalance(accountNumber));
         String expectedMessage = "Account number not present in system " + accountNumber;
         String actualMessage = entityNotFoundException.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
@@ -112,12 +112,12 @@ class AccountServiceTest {
     @Order(4)
     void getAccountTransactions() {
 
-        List<AccountTransactionDto> accountTransactionDtos =  assertDoesNotThrow(() -> accountService.getAccountTransactions("2121"));
+        List<AccountTransactionDto> accountTransactionDtos = assertDoesNotThrow(() -> accountService.getAccountTransactions("2121"));
 
         assertThat(accountTransactionDtos, not(IsEmptyCollection.empty()));
         assertThat(accountTransactionDtos, hasSize(2));
-        assertTrue(accountTransactionDtos.stream().anyMatch( accountTransactionDto -> accountTransactionDto.getTransactionAmount() == 50));
-        assertTrue(accountTransactionDtos.stream().anyMatch( accountTransactionDto -> accountTransactionDto.getTransactionAmount() == 10));
+        assertTrue(accountTransactionDtos.stream().anyMatch(accountTransactionDto -> accountTransactionDto.getTransactionAmount() == 50));
+        assertTrue(accountTransactionDtos.stream().anyMatch(accountTransactionDto -> accountTransactionDto.getTransactionAmount() == 10));
 
         double balance = assertDoesNotThrow(() -> accountService.getAccountBalance("2121"));
 

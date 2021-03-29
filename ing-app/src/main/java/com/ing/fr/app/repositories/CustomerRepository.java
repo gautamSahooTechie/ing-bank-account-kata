@@ -7,9 +7,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface CustomerRepository  extends CrudRepository<Customer, Long> {
+public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
     @Query("SELECT cust FROM Customer cust  WHERE cust.customerCif=(:customerCif)")
-    public Optional<Customer> getCustomerByCIF(@Param("customerCif") String customerCif);
+    Optional<Customer> getCustomerByCIF(@Param("customerCif") String customerCif);
 
 }

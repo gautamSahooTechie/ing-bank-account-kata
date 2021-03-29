@@ -25,13 +25,13 @@ public class CustomerController {
     private AccountService accountService;
 
     @GetMapping(value = "/{customerCif}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDto> getCustomer(@PathVariable("customerCif") @NotEmpty String customerCif) throws ServiceException{
+    public ResponseEntity<CustomerDto> getCustomer(@PathVariable("customerCif") @NotEmpty String customerCif) throws ServiceException {
         CustomerDto customer = customerService.findCustomerByCustomerCif(customerCif);
         return ResponseEntity.ok(customer);
     }
 
     @PostMapping(value = "/createCustomer", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createCustomer(@Valid @RequestBody CustomerDto customerDto) throws ServiceException{
+    public ResponseEntity<Void> createCustomer(@Valid @RequestBody CustomerDto customerDto) throws ServiceException {
         customerService.createCustomer(customerDto);
         return ResponseEntity.ok().build();
     }

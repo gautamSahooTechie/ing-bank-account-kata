@@ -1,39 +1,17 @@
 package com.ing.fr.app.models;
 
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.Calendar;
-import java.util.Set;
-import com.ing.fr.app.config.AppConfig;
-import com.ing.fr.app.entities.AccountTransaction;
-import com.ing.fr.app.exceptions.EntityAlreadyPresentException;
-import com.ing.fr.app.exceptions.EntityNotFoundException;
-import com.ing.fr.app.exceptions.MinDepositAmountValidationException;
-import com.ing.fr.app.exceptions.OverDraftFacilityValidationException;
-import com.ing.fr.app.models.AccountDto;
-import com.ing.fr.app.models.AccountTransactionDto;
-import com.ing.fr.app.models.CustomerDto;
-import org.hamcrest.collection.IsEmptyCollection;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 import java.util.Date;
-import java.util.List;
-import java.util.function.Predicate;
+import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CustomerDtoTest {
 
@@ -59,7 +37,7 @@ class CustomerDtoTest {
 
         customerDto.setDateOfBirth(new Date(calendar.getTimeInMillis()));
         Set<ConstraintViolation<CustomerDto>> violations = validator.validate(customerDto);
-        assert(violations.isEmpty());
+        assert (violations.isEmpty());
     }
 
     @Test

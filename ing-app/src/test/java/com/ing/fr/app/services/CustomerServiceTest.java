@@ -3,7 +3,6 @@ package com.ing.fr.app.services;
 import com.ing.fr.app.config.AppConfig;
 import com.ing.fr.app.entities.AccountTransaction;
 import com.ing.fr.app.exceptions.EntityAlreadyPresentException;
-import com.ing.fr.app.exceptions.EntityNotFoundException;
 import com.ing.fr.app.exceptions.MinDepositAmountValidationException;
 import com.ing.fr.app.exceptions.OverDraftFacilityValidationException;
 import com.ing.fr.app.models.AccountDto;
@@ -24,7 +23,6 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -65,13 +63,14 @@ class CustomerServiceTest {
 
     @Test
     @Order(2)
-    void testCreateAccountUnderCustomer(){
+    void testCreateAccountUnderCustomer() {
         //Create Account under customer
         AccountDto accountDto = new AccountDto();
         accountDto.setAccountNumber("3223");
         accountDto.setBalance(100);
-        assertDoesNotThrow( () -> accountService.createAccountUnderCustomer(accountDto, "cif006"));
+        assertDoesNotThrow(() -> accountService.createAccountUnderCustomer(accountDto, "cif006"));
     }
+
     @Test
     void testDepositMoneyWithValidationException() {
         double minimumDepositAmount = context.getBean("minimumDepositAmount", Double.class);
@@ -95,9 +94,9 @@ class CustomerServiceTest {
         assertDoesNotThrow(() -> customerService.depositMoney("3223", 30));
 
         // verify transaction is registered
-        List<AccountTransactionDto> accountTransactionDtos =  assertDoesNotThrow(() -> accountService.getAccountTransactions("3223"));
+        List<AccountTransactionDto> accountTransactionDtos = assertDoesNotThrow(() -> accountService.getAccountTransactions("3223"));
         assertThat(accountTransactionDtos, not(IsEmptyCollection.empty()));
-        assertTrue(accountTransactionDtos.stream().anyMatch( accountTransactionDto -> accountTransactionDto.getTransactionAmount() == 30 && accountTransactionDto.getTransactionType() == AccountTransaction.TransactionType.CREDIT));
+        assertTrue(accountTransactionDtos.stream().anyMatch(accountTransactionDto -> accountTransactionDto.getTransactionAmount() == 30 && accountTransactionDto.getTransactionType() == AccountTransaction.TransactionType.CREDIT));
     }
 
     @Test
@@ -106,9 +105,9 @@ class CustomerServiceTest {
         assertDoesNotThrow(() -> customerService.withdrawMoney("3223", 20));
 
         // verify transaction is registered
-        List<AccountTransactionDto> accountTransactionDtos =  assertDoesNotThrow(() -> accountService.getAccountTransactions("3223"));
+        List<AccountTransactionDto> accountTransactionDtos = assertDoesNotThrow(() -> accountService.getAccountTransactions("3223"));
         assertThat(accountTransactionDtos, not(IsEmptyCollection.empty()));
-        assertTrue(accountTransactionDtos.stream().anyMatch( accountTransactionDto -> accountTransactionDto.getTransactionAmount() == 20 && accountTransactionDto.getTransactionType() == AccountTransaction.TransactionType.DEBIT));
+        assertTrue(accountTransactionDtos.stream().anyMatch(accountTransactionDto -> accountTransactionDto.getTransactionAmount() == 20 && accountTransactionDto.getTransactionType() == AccountTransaction.TransactionType.DEBIT));
 
     }
 

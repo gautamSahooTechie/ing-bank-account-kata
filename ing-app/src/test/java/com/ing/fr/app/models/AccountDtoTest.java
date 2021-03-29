@@ -27,11 +27,11 @@ class AccountDtoTest {
         accountDto.setBalance(100);
         accountDto.setAccountNumber("sdsds");
         Set<ConstraintViolation<AccountDto>> violations = validator.validate(accountDto);
-        assert(violations.isEmpty());
+        assert (violations.isEmpty());
     }
 
     @Test
-    public void testAccountDtoValidationsWithErrors(){
+    public void testAccountDtoValidationsWithErrors() {
 
         AccountDto accountDto = new AccountDto();
         accountDto.setBalance(100);
