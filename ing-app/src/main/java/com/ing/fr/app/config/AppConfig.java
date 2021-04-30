@@ -23,6 +23,11 @@ public class AppConfig {
         return false;
     }
 
+//    @Bean
+//    public String customerProterties(){
+//        ConfigurationUtils.getRequiredBeanClassName()
+//    }
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
